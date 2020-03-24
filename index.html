@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Leaflet Map</title>
+	<meta charset="utf-8">
+	<!-- Load Leaflet from CDN -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 90%;
+            width: 100%;
+        }
+
+		.c-0-color { background: #80FF00; }
+		.c-1-color { background: #FFF000; }
+		.c-2-color { background: #FF8000; }
+		.c-3-color { background: #FF0000; }
+
+    </style>
+</head>
+<body>
+
+	<div>
+		<p class="is-size-2 has-text-centered">1 kilometre autour de chez vous</p>
+		<p class="is-size-6 has-text-centered">cliquez ou vous habitez</p>
+	</div>
+
+	<div id="map"></div>
+
+	<p class="is-size-6 has-text-right is-italic">Enjoy ! </p>
+
+	<script>
+		//map
+		var map = L.map('map').setView([46.679594,1.966553], 6);
+		var assetLayerGroup = new L.LayerGroup();
+
+		var redIcon = L.icon({
+		 iconUrl: 'images/redIcon.png',
+		 shadowUrl: 'images/marker-shadow.png',
+		 iconAnchor: [12, 41] //[iconWidth/2, iconHeight]
+		});
+
+		L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+		  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		}).addTo(map);
+
+		map.on('click', function(e) {
+				addMarker(e);
+				add_1km_circle(e);
+		} );
+
+
+		function addMarker(e){
+			myLoc = e.latlng;
+			locationMarker = L.marker(e.latlng, {icon: redIcon}).addTo(map);
+			assetLayerGroup.addLayer(locationMarker);
+		}
+
+		function add_1km_circle(e){
+			myLoc = e.latlng;
+			circle1km = L.circle(e.latlng, {radius: 1000}).addTo(map);
+			assetLayerGroup.addLayer(circle1km);
+		}
+
+
+	</script>
+</body>
